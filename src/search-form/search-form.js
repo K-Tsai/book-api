@@ -6,7 +6,7 @@ class searchForm extends Component {
     <section className= 'searchForm'>
 			<form>
 				<fieldset>
-					<label for= 'searchInput'>Search: </label>
+					<label htmlFor= 'searchInput'>Search: </label>
 					<input type='text' id= 'searchInput'/>
 					<button type='submit'>Search</button>
 				</fieldset>
