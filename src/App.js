@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('https://www.googleapis.com/books/v1/volumes?q=henry&key=AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk')
+    fetch('https://www.googleapis.com/books/v1/volumes?q=henry&key=AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk&filter=partial&printType=books')
       .then(response => response.json())
       .then(data => {
         console.log(data);
