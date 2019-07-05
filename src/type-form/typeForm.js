@@ -7,10 +7,10 @@ class typeForm extends Component {
     <section className= 'typeForm'>
 			<form>
 				<fieldset>
-				  <select id="print" name="print">
+				  <select id="printType" name="print">
             <option value="None">Select one...</option>
           </select>
-          <select id="book" name="book">
+          <select id="bookType" name="book">
             <option value="None">Select one...</option>
           </select>
 				</fieldset>

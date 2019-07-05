@@ -10,7 +10,7 @@ class App extends Component {
       books: [{
         title : "",
         author : "",
-        publishedDate : ""
+        description : ""
       }],
       selected: null,
       baseUrl : "https://www.googleapis.com/books/v1/volumes"
@@ -18,7 +18,7 @@ class App extends Component {
   }
 
   onSearchClick = (searchTerm) => {
-    let url = this.state.baseUrl + `?q=${searchTerm}`;
+    let url = this.state.baseUrl + `?q=${searchTerm}` +`&key=${AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk}`;
 
     console.log(url);
 
@@ -34,7 +34,7 @@ class App extends Component {
             return {
                 title: item.volumeInfo.title,
                 author: item.volumeInfo.authors[0],
-                publishedDate: item.volumeInfo.publishedDate
+                description: item.saleInfo.amount
             }
         });
 
@@ -56,7 +56,7 @@ class App extends Component {
               return (<div>
                         <h2> {book.title}</h2>
                         <h3> {book.author}</h3>
-                        <h4> {book.publishedDate}</h4>
+                        <h4> {book.description}</h4> 
                       </div>)
             })}
           </div>
