@@ -7,18 +7,22 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bookDropDown: [],
       books: [{
         title : "",
         author : "",
-        description : ""
+        description : "",
+        price: ""
       }],
       selected: null,
       baseUrl : "https://www.googleapis.com/books/v1/volumes"
     }
   }
 
-  onSearchClick = (searchTerm) => {
-    let url = this.state.baseUrl + `?q=${searchTerm}` +`&key=${AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk}`;
+  onSearchClick = (searchTerm, filter, printType) => {
+    let url = this.state.baseUrl + `?q=${searchTerm}` + 
+    `?filter=${filter}`+ `?printType=${printType}`+ 
+    `&key=AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk`;
 
     console.log(url);
 
@@ -26,15 +30,19 @@ class App extends Component {
       .then(response => {
         if ( response.ok ){
           return response.json();
+        } else {
         }
       })
       .then(responseJSON => {
-
+        
         let listOfbooks = responseJSON.items.map(item => {
+          console.log(item);
+          //if(item.saleInfo.isEbook === true) {
             return {
                 title: item.volumeInfo.title,
                 author: item.volumeInfo.authors[0],
-                description: item.saleInfo.amount
+                //description: item.searchInfo.textSnippet, 
+                //price: item.saleInfo.listPrice.amount 
             }
         });
 
@@ -42,7 +50,12 @@ class App extends Component {
             books : listOfbooks
         });
       });
-  };
+    };
+      setSelected (selected) {
+        this.setState ({
+          selected
+        });
+      }
 
   render() {
     return (
@@ -50,13 +63,15 @@ class App extends Component {
         <header>
           <h1 className='googleTitle'>Google Book Search</h1>
           <SearchForm onSearchClick={this.onSearchClick}/>
-          <TypeForm />
+          <TypeForm 
+          bookInfo= {this.state.bookDropDown}
+          changeHandler={selected => this.setSelected(selected)}
+          />
           <div className="results">
             {this.state.books.map(book => {
               return (<div>
-                        <h2> {book.title}</h2>
-                        <h3> {book.author}</h3>
-                        <h4> {book.description}</h4> 
+                        <h1> {book.title}</h1>
+                        <p> {book.author}</p>
                       </div>)
             })}
           </div>
