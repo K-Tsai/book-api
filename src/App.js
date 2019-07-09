@@ -19,11 +19,15 @@ class App extends Component {
     }
   }
 
-  onSearchClick = (searchTerm, filter, printType) => {
-    let url = this.state.baseUrl + `?q=${searchTerm}` + 
-    `?filter=${filter}`+ `?printType=${printType}`+ 
-    `&key=AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk`;
-
+  onSearchClick = (searchTerm) => {
+    let filter = document.getElementById('bookType').value;
+    let printType= document.getElementById('printType').value;
+    let url = this.state.baseUrl + `?q=${searchTerm}` 
+    + `&key=AIzaSyDivwzMumjxqEjgIiFyx9fmKchqPdW5aZk`+ `&printType=${printType}`;
+    if (filter !== "No Filter") {
+      url += `&filter=${filter}`
+    }
+    console.log(filter);
     console.log(url);
 
     fetch(url)
@@ -37,13 +41,20 @@ class App extends Component {
         
         let listOfbooks = responseJSON.items.map(item => {
           console.log(item);
-          //if(item.saleInfo.isEbook === true) {
-            return {
-                title: item.volumeInfo.title,
-                author: item.volumeInfo.authors[0],
-                //description: item.searchInfo.textSnippet, 
-                //price: item.saleInfo.listPrice.amount 
+          
+          let result= {
+            title: item.volumeInfo.title,
+          }
+          if (item.searchInfo) {
+            result.description= item.searchInfo.textSnippet; 
+          }
+            if(item.saleInfo.listPrice) {
+              result.price= item.saleInfo.listPrice.amount 
             }
+            if(item.volumeInfo.author){
+              result.author= item.volumeInfo.authors[0]
+            }
+            return result
         });
 
         this.setState({
@@ -51,11 +62,6 @@ class App extends Component {
         });
       });
     };
-      setSelected (selected) {
-        this.setState ({
-          selected
-        });
-      }
 
   render() {
     return (
@@ -63,15 +69,14 @@ class App extends Component {
         <header>
           <h1 className='googleTitle'>Google Book Search</h1>
           <SearchForm onSearchClick={this.onSearchClick}/>
-          <TypeForm 
-          bookInfo= {this.state.bookDropDown}
-          changeHandler={selected => this.setSelected(selected)}
-          />
+          <TypeForm />
           <div className="results">
             {this.state.books.map(book => {
               return (<div>
                         <h1> {book.title}</h1>
                         <p> {book.author}</p>
+                        <p> {book.description} </p>
+                        <p> {book.price} </p>
                       </div>)
             })}
           </div>
